@@ -18,29 +18,70 @@ const pAequorFactory = (specimenNum, dna) => {
   specimenNum: specimenNum,
   dna: dna,
 
-  mutate(dna) {
-    let newDna = [];
-    let randBase = dna[Math.floor(Math.random() * 15)];
+  mutate() {
+    let randElement = Math.floor(Math.random() * 15);
     let bases = ['A', 'T', 'C', 'G']
-    if (randBase === 'A') {
+    if (this.dna[randElement] === 'A') {
       let newBases = bases.splice(0,1);
-      randBase = newBases[Math.floor(Math.random() * 3)];
-    } else if (randBase === 'T') {
+      let replacementBase = bases[Math.floor(Math.random() * 3)];
+      this.dna.splice(randElement, 1, replacementBase);
+    } else if (this.dna[randElement] === 'T') {
       let newBases = bases.splice(1,1);
-      randBase = newBases[Math.floor(Math.random() * 3)];
-    } else if (randBase === 'C') {
+      let replacementBase = bases[Math.floor(Math.random() * 3)];
+      this.dna.splice(randElement, 1, replacementBase);
+    } else if (this.dna[randElement] === 'C') {
       let newBases = bases.splice(2,1);
-      randBase = newBases[Math.floor(Math.random() * 3)];
-    } else if (randBase === 'G') {
+      let replacementBase = bases[Math.floor(Math.random() * 3)];
+      this.dna.splice(randElement, 1, replacementBase);
+    } else if (this.dna[randElement] === 'G') {
       let newBases = bases.splice(2,1);
-      randBase = newBases[Math.floor(Math.random() * 3)];
+      let replacementBase = bases[Math.floor(Math.random() * 3)];
+      this.dna.splice(randElement, 1, replacementBase);
     }
-    return console.log(newDna);
+    return dna;
   },
 
-  compareDNA() {
+compareDNA (pAObject) {
+  //compare this.dna with pAObject.dna
+  let dnaMatchCount = 0;
+  for (i = 0; i < 15; i++) {
+    if (this.dna[i] === pAObject.dna[i]) {
+      dnaMatchCount += 1;
+      //console.log (dnaMatchCount);
+    };
+  };
+  let percMatch = dnaMatchCount/15*100;
+  console.log(`Specimen ${this.specimenNum} and ${pAObject.specimenNum} have ${percMatch}% DNA in common`);
+  },
 
+  willLikelySurvive() {
+    let baseCount = 0;
+    for (i = 0; i < 15; i++) {
+      if ((this.dna[i] = 'C') || (this.dna[i] = 'G')) {
+        baseCount += 1;
+      }
+    };
+    if ((baseCount/15) > 0.6) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   }
 }
+
+const survivingSpecimen = [];
+let idCounter = 1;
+
+while (survivingSpecimen.length < 30) {
+  let newOrg = pAequorFactory(idCounter, mockUpStrand());
+  if (newOrg.willLikelySurvive()) {
+    survivingSpecimen.push(newOrg);
+  }
+  idCounter++;
+}
+
+console.log(survivingSpecimen)
+
+//survivingSpecimen[0].compareDNA(survivingSpecimen[1]);
